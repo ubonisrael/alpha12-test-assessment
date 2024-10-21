@@ -1495,6 +1495,10 @@ td {
   .next-page-btn {
     color: var(--clr-btn);
   }
+
+  .pagination-container {
+    padding-inline: 0;
+  }
 }
 
 .prev-page-btn:disabled,
