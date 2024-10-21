@@ -1,6 +1,8 @@
 import Chart from "chart.js/auto";
 import eventsHistory from "./data.json";
 
+let chart = null
+
 const speaker_avatar = `<svg width="84" height="36" viewBox="0 0 84 36" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
 <g clip-path="url(#clip0_9_41167)">
 <rect x="50" y="2" width="32" height="32" rx="16" fill="url(#pattern0_9_41167)"/>
@@ -87,6 +89,8 @@ darkModeToggle.addEventListener("change", function () {
   currentThemeSetting = newTheme;
   // update border style on header element
   nav.style.border = this.checked ? "none" : "2px solid #e2e8f0";
+  // redraw chart
+  drawChart()
 });
 
 //
@@ -265,7 +269,7 @@ slideBtns.forEach((slideBtn) => {
 //
 const isMobile = window.innerWidth < 768; // mobile breakpoint
 
-(async function () {
+async function drawChart() {
   const data = [
     { month: "Jan", registrations: 667 },
     { month: "Feb", registrations: 935 },
@@ -281,7 +285,14 @@ const isMobile = window.innerWidth < 768; // mobile breakpoint
     { month: "Dec", registrations: 607 },
   ];
 
-  new Chart(document.getElementById("event-registrations"), {
+  const canvas = document.getElementById("event-registrations")
+
+  if (chart) {
+    // chart exists, destroy it before creating a new one
+    chart.destroy()
+  }
+  
+  chart = new Chart(canvas, {
     type: "bar",
     data: {
       // check if it is a mobile viewport
@@ -296,6 +307,7 @@ const isMobile = window.innerWidth < 768; // mobile breakpoint
       ],
     },
     options: {
+      animations: false,
       responsive: true,
       maintainAspectRatio: false,
       plugins: {
@@ -314,6 +326,9 @@ const isMobile = window.innerWidth < 768; // mobile breakpoint
             color: "#e2e8f0",
             tickBorderDash: [0, 6],
           },
+          ticks: {
+            color: currentThemeSetting === "dark" ? "#FFFFFF" : "#64748B"
+          }
         },
         y: {
           beginAtZero: true,
@@ -333,12 +348,13 @@ const isMobile = window.innerWidth < 768; // mobile breakpoint
                 return value;
               }
             },
+            color: currentThemeSetting === "dark" ? "#FFFFFF" : "#64748B"
           },
         },
       },
     },
   });
-})();
+};
 
 //
 //
@@ -851,6 +867,9 @@ document.addEventListener("DOMContentLoaded", function () {
   document
     .querySelector("html")
     .setAttribute("data-theme", currentThemeSetting);
+
+  // draw chart
+  drawChart()
 
   // display table
   displayEventHistory(
