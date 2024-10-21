@@ -105,7 +105,7 @@ darkModeToggle.addEventListener("change", function () {
   // update the currentThemeSetting in memory
   currentThemeSetting = newTheme;
   // update border style on header element
-  nav.style.border = this.checked ? "none" : "2px solid #e2e8f0";
+  nav.style.border = this.checked ? "none" : "1px solid #f2f2f7";
   // redraw chart
   drawChart();
 });
@@ -536,6 +536,8 @@ const queryInput = document.getElementById("search-events-history");
 const sortText = document.querySelector(".sort-box-text");
 const sortOptions = document.querySelectorAll(".sort-option");
 
+// store variables in localstorage for data persistence
+let currentData = JSON.parse(localStorage.getItem("data")) || eventsHistory.slice(0, 10)
 let query = localStorage.getItem("query") || "";
 let dateOption = localStorage.getItem("date") || "all";
 let currentStatus = localStorage.getItem("status") || "all";
@@ -601,6 +603,9 @@ function displayEventHistory(
   });
 
   const filteredData = data.slice(start, end);
+  // set filtered data to localStorage for persistence
+  currentData = filteredData.slice()
+  localStorage.setItem('data', JSON.stringify(currentData))
 
   // if the array is empty
   // show message indicating no matches
@@ -624,7 +629,7 @@ function displayEventHistory(
   const collapseCellBtns = document.querySelectorAll(".collapse-cell-btn");
   rows.forEach((row) => {
     row.addEventListener("click", function () {
-      displayModal(eventsHistory[Number(row.dataset.id)]);
+      displayModal(currentData[Number(row.dataset.id)]);
     });
   });
 
@@ -697,8 +702,10 @@ function displayEventHistory(
   document.querySelectorAll(".rows-number").forEach((element) => {
     element.addEventListener("click", function () {
       numberOfRows = Number(element.dataset.rowsnumber);
+      // reset to the first page
       page = 1;
       localStorage.setItem("page", page);
+      localStorage.setItem("numberOfRows", numberOfRows);
       displayEventHistory(
         1,
         numberOfRows,
