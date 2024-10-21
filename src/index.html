@@ -154,7 +154,9 @@
         <div class="summary-container">
           <div class="events summary">
             <h2 class="summary-subheader">
-              total events<span class="material-symbols--info-outline more-info"></span>
+              total events<span
+                class="material-symbols--info-outline more-info"
+              ></span>
             </h2>
             <div class="summary-text-container">
               <p class="summary-text">100,000</p>
@@ -170,7 +172,9 @@
           </div>
           <div class="active-speakers summary">
             <h2 class="summary-subheader">
-              active speakers<span class="material-symbols--info-outline more-info"></span>
+              active speakers<span
+                class="material-symbols--info-outline more-info"
+              ></span>
             </h2>
             <div class="summary-text-container">
               <p class="summary-text">25</p>
@@ -186,7 +190,9 @@
           </div>
           <div class="total-reg summary">
             <h2 class="summary-subheader">
-              total registrations<span class="material-symbols--info-outline more-info"></span>
+              total registrations<span
+                class="material-symbols--info-outline more-info"
+              ></span>
             </h2>
             <div class="summary-text-container">
               <p class="summary-text">300</p>
@@ -202,7 +208,9 @@
           </div>
           <div class="total-revenue summary">
             <h2 class="summary-subheader">
-              total revenue<span class="material-symbols--info-outline more-info"></span>
+              total revenue<span
+                class="material-symbols--info-outline more-info"
+              ></span>
             </h2>
             <div class="summary-text-container">
               <p class="summary-text">$500,000</p>
@@ -337,16 +345,16 @@
         <div class="events-history-controls">
           <div class="events-history-filters">
             <!-- search filter -->
-            <form id="search-form" action="">
-                <label for="search-events-history" class="search-label">
-                    <input
-                      type="text"
-                      name="search-events-history"
-                      id="search-events-history"
-                      placeholder="Search..."
-                    />
-                    <span class="lucide--search"></span>
-                  </label>
+            <form id="search-form" novalidate>
+              <label for="search-events-history" class="search-label">
+                <input
+                  type="text"
+                  name="search-events-history"
+                  id="search-events-history"
+                  placeholder="Search..."
+                />
+                <span class="lucide--search"></span>
+              </label>
             </form>
             <!-- dropdown menu for date -->
             <div class="date-box">
@@ -354,6 +362,15 @@
               <span
                 class="solar--alt-arrow-down-line-duotone select-box__icon"
               ></span>
+              <ul class="date-option-dropdown">
+                <li class="date-option active-option" data-date-option="all">
+                  all
+                </li>
+                <li class="date-option" data-date-option="7">last 7 days</li>
+                <li class="date-option" data-date-option="14">last 14 days</li>
+                <li class="date-option" data-date-option="-7">next 7 days</li>
+                <li class="date-option" data-date-option="-14">next 14 days</li>
+              </ul>
             </div>
             <!-- dropdown menu for status -->
             <div class="status-box">
@@ -361,6 +378,20 @@
               <span
                 class="solar--alt-arrow-down-line-duotone select-box__icon"
               ></span>
+              <ul class="status-option-dropdown">
+                <li
+                  class="status-option active-option"
+                  data-status-option="all"
+                >
+                  all
+                </li>
+                <li class="status-option" data-status-option="in progress">
+                  in progress
+                </li>
+                <li class="status-option" data-status-option="completed">
+                  completed
+                </li>
+              </ul>
             </div>
             <!-- dropdown menu for name -->
             <div class="name-box">
@@ -369,16 +400,22 @@
                 class="solar--alt-arrow-down-line-duotone select-box__icon"
               ></span>
             </div>
-        </div>
-        <p class="filter-info">Displaying 100 results</p>
+          </div>
+          <p class="filter-info">Displaying 100 results</p>
           <div class="sort-control-container">
             <div class="sort-control">
               <p class="">sort:</p>
               <div class="sort-box">
-                <p>most recent</p>
+                <p class="sort-box-text">most recent</p>
                 <span
                   class="solar--alt-arrow-down-line-duotone select-box__icon"
                 ></span>
+                <ul class="sort-option-dropdown">
+                  <li class="sort-option" data-sort-option="most recent">
+                    most recent
+                  </li>
+                  <li class="sort-option" data-sort-option="oldest">oldest</li>
+                </ul>
               </div>
             </div>
             <div class="other-controls-container">
@@ -389,7 +426,7 @@
                 ></span>
               </button>
               <button class="export-btn">
-                <span aria-hidden="true" class="fe--import"></span>export
+                <span aria-hidden="true" class="fe--import"></span>Export
               </button>
             </div>
           </div>

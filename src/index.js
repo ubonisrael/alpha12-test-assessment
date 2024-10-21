@@ -284,6 +284,8 @@ const isMobile = window.innerWidth < 768; // mobile breakpoint
   new Chart(document.getElementById("event-registrations"), {
     type: "bar",
     data: {
+      // check if it is a mobile viewport
+      // if it is, use the first 2 chars as the label
       labels: data.map((row) => (isMobile ? row.month.slice(0, 2) : row.month)),
       datasets: [
         {
@@ -395,9 +397,6 @@ function createRows(data) {
 function createTable(data) {
   const headings = ["event name", "date", "speaker", "status"];
 
-  // Return some HTML that uses `getCells` to create
-  // some headings, but also to create the rows
-  // in the tbody.
   return `
     <table>
       <caption class="sr-only">History of events</caption>
@@ -409,8 +408,8 @@ function createTable(data) {
 }
 
 // helper function for creating pagination
-function createPagination(currentPage, numberOfRows) {
-  const totalPages = Math.ceil(eventsHistory.length / numberOfRows);
+function createPagination(data, currentPage, numberOfRows) {
+  const totalPages = Math.ceil(data.length / numberOfRows);
   return `
           <div class="pagination-ctrl">
             <button ${
@@ -498,26 +497,93 @@ function displayModal(data) {
   });
 }
 
-// ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-let search = "";
-let date = "";
-let status = "all";
-let page = 1;
-let numberOfRows = 10;
+// ****************************************************************** //
+
+const queryInput = document.getElementById("search-events-history");
+const sortText = document.querySelector(".sort-box-text");
+const sortOptions = document.querySelectorAll(".sort-option");
+
+let query = localStorage.getItem("query") || "";
+let dateOption = localStorage.getItem("date") || "all";
+let currentStatus = localStorage.getItem("status") || "all";
+let currentPage = Number(localStorage.getItem("page")) || 1;
+let numberOfRows = Number(localStorage.getItem("numberOfRows")) || 10;
+let sortOption = localStorage.getItem("sort") || "most recent";
+
+queryInput.value = query;
 
 // helper function for fetching and displaying table data
-function displayEventHistory(page, numberOfRows) {
+function displayEventHistory(
+  page,
+  numOfRows,
+  search = "",
+  status = "all",
+  interval = "all",
+  sort = "most recent"
+) {
   // calculate start and end indexes of rows to be selected
-  const start = (page - 1) * numberOfRows;
-  const end = start + numberOfRows;
+  const start = (page - 1) * numOfRows;
+  const end = start + numOfRows;
 
   // get data to be displayed
-  const data = eventsHistory.slice(start, end);
+  const searchRegex = new RegExp(search, "i");
+  const today = new Date();
+  const data = eventsHistory
+    .filter((item) => {
+      if (status === "all") {
+        return searchRegex.test(item["event name"]);
+      }
+      return searchRegex.test(item["event name"]) && item.status === status;
+    })
+    .filter((item) => {
+      // calulate the number of days between today and dateOption
+      const eventDate = new Date(item.date);
+      const daysPast = (today - eventDate) / (60 * 60 * 24 * 1000);
 
-  document.querySelector(".table-container").innerHTML = createTable(data);
+      if (interval === "all") {
+        return item;
+      }
+      if (interval === "7" && daysPast < 8 && daysPast >= 0) {
+        return item;
+      }
+      if (interval === "14" && daysPast < 15 && daysPast >= 0) {
+        return item;
+      }
+      if (interval === "-7" && daysPast > -8 && daysPast < 0) {
+        return item;
+      }
+      if (interval === "-14" && daysPast > -15 && daysPast < 0) {
+        return item;
+      }
+    });
+
+  // sort the array according to the sortOption
+  data.sort(function (a, b) {
+    const dateA = new Date(a.date);
+    const dateB = new Date(b.date);
+    if (sort === "most recent") {
+      return dateB - dateA;
+    }
+    return dateA - dateB;
+  });
+
+  const filteredData = data.slice(start, end);
+
+  // if the array is empty
+  // show message indicating no matches
+  if (!filteredData.length) {
+    document.querySelector(
+      ".table-container"
+    ).innerHTML = `<div><p>No results found for current search conditions.</p></div>`;
+    return;
+  }
+
+  document.querySelector(".table-container").innerHTML =
+    createTable(filteredData);
   document.querySelector(".pagination-container").innerHTML = createPagination(
+    data,
     page,
-    numberOfRows
+    numOfRows
   );
 
   // select all rows and add listeners for click events
@@ -525,7 +591,6 @@ function displayEventHistory(page, numberOfRows) {
   const collapseCellBtns = document.querySelectorAll(".collapse-cell-btn");
   rows.forEach((row) => {
     row.addEventListener("click", function () {
-      console.log("row clicked");
       displayModal(eventsHistory[Number(row.dataset.id)]);
     });
   });
@@ -556,37 +621,221 @@ function displayEventHistory(page, numberOfRows) {
   document
     .querySelector(".prev-page-btn")
     .addEventListener("click", function () {
-      displayEventHistory(page - 1, numberOfRows);
+      currentPage -= 1;
+      localStorage.setItem("page", currentPage);
+      displayEventHistory(
+        currentPage,
+        numberOfRows,
+        query,
+        currentStatus,
+        dateOption,
+        sortOption
+      );
     });
   document
     .querySelector(".next-page-btn")
     .addEventListener("click", function () {
-      displayEventHistory(page + 1, numberOfRows);
+      currentPage += 1;
+      localStorage.setItem("page", currentPage);
+      displayEventHistory(
+        currentPage,
+        numberOfRows,
+        query,
+        currentStatus,
+        dateOption,
+        sortOption
+      );
     });
 
   // display numberOfRows dropdown when clicked
   const displayRowsCtrl = document.querySelector(".display-ctrl");
-  const rowsNumberDropdownContainer = document.querySelector('.rows-number-dropdown')
+  const rowsNumberDropdownContainer = document.querySelector(
+    ".rows-number-dropdown"
+  );
   displayRowsCtrl.addEventListener("click", function () {
     rowsNumberDropdownContainer.classList.toggle("show");
   });
 
   // if dropdown is on and the click is outside of displayRowsCtrl
   // close the dropdown
-  document.addEventListener("click", function (e) {
-    // check if click is inside rowsNumberDropdownContainer
-    if (
-      rowsNumberDropdownContainer.classList.contains("show") &&
-      !displayRowsCtrl.contains(e.target)
-    ) {
-      rowsNumberDropdownContainer.classList.toggle("show");
-    }
-  });
+  handleOutsideClick(displayRowsCtrl, rowsNumberDropdownContainer);
+
   // add dropdown support for changing number of rows to be displayed
   document.querySelectorAll(".rows-number").forEach((element) => {
     element.addEventListener("click", function () {
-      displayEventHistory(1, Number(element.dataset.rowsnumber));
+      numberOfRows = Number(element.dataset.rowsnumber);
+      page = 1;
+      localStorage.setItem("page", page);
+      displayEventHistory(
+        1,
+        numberOfRows,
+        query,
+        currentStatus,
+        dateOption,
+        sortOption
+      );
     });
+  });
+}
+
+//
+//
+// FILTERS AND SORTING
+//
+//
+
+// QUERY
+
+// add functionality for searching for events by name
+document.getElementById("search-form").addEventListener("submit", function (e) {
+  e.preventDefault();
+  query = queryInput.value;
+  localStorage.setItem("query", query);
+  displayEventHistory(
+    1,
+    numberOfRows,
+    query,
+    currentStatus,
+    dateOption,
+    sortOption
+  );
+});
+
+// STATUS
+
+// add event listener for toggling visibility of status dropdown
+document.querySelector(".status-box").addEventListener("click", function () {
+  document.querySelector(".status-option-dropdown").classList.toggle("show");
+});
+
+// add an event listener to the status options
+const statusOptions = document.querySelectorAll(".status-option");
+statusOptions.forEach((element) => {
+  element.addEventListener("click", function (e) {
+    if (!element.classList.contains("active-option")) {
+      statusOptions.forEach((elem) => {
+        if (elem.classList.contains("active-option")) {
+          elem.classList.remove("active-option");
+        }
+      });
+      element.classList.add("active-option");
+      currentStatus = element.dataset.statusOption;
+      localStorage.setItem("status", currentStatus);
+      displayEventHistory(
+        currentPage,
+        numberOfRows,
+        query,
+        currentStatus,
+        dateOption,
+        sortOption
+      );
+    }
+  });
+});
+
+// if dropdown is on and the click is outside of status-box
+// close the dropdown
+handleOutsideClick(
+  document.querySelector(".status-box"),
+  document.querySelector(".status-option-dropdown")
+);
+
+// DATE
+
+// add event listener for toggling visibility of date dropdown
+document.querySelector(".date-box").addEventListener("click", function () {
+  document.querySelector(".date-option-dropdown").classList.toggle("show");
+});
+
+// add an event listener to the date options
+const dateOptions = document.querySelectorAll(".date-option");
+dateOptions.forEach((element) => {
+  element.addEventListener("click", function (e) {
+    if (!element.classList.contains("active-option")) {
+      dateOptions.forEach((elem) => {
+        if (elem.classList.contains("active-option")) {
+          elem.classList.remove("active-option");
+        }
+      });
+      element.classList.add("active-option");
+      dateOption = element.dataset.dateOption;
+      localStorage.setItem("date", dateOption);
+      displayEventHistory(
+        currentPage,
+        numberOfRows,
+        query,
+        currentStatus,
+        dateOption,
+        sortOption
+      );
+    }
+  });
+});
+
+// if dropdown is on and the click is outside of date-box
+// close the dropdown
+handleOutsideClick(
+  document.querySelector(".date-box"),
+  document.querySelector(".date-option-dropdown")
+);
+
+// SORT BY RECENCY
+
+sortText.textContent = sortOption;
+
+sortOptions.forEach((element) => {
+  if (element.dataset.sortOption === sortOption) {
+    element.classList.add("active-option");
+  }
+});
+
+const sortBox = document.querySelector(".sort-box");
+const sortContainer = document.querySelector(".sort-option-dropdown");
+
+// add event listener for toggling visibility of sort dropdown
+sortBox.addEventListener("click", function () {
+  sortContainer.classList.toggle("show");
+});
+
+// add an event listener to the sort options
+sortOptions.forEach((element) => {
+  element.addEventListener("click", function (e) {
+    if (!element.classList.contains("active-option")) {
+      sortOptions.forEach((elem) => {
+        if (elem.classList.contains("active-option")) {
+          elem.classList.remove("active-option");
+        }
+      });
+      element.classList.add("active-option");
+      sortOption = element.dataset.sortOption;
+      localStorage.setItem("sort", sortOption);
+      sortText.textContent = sortOption;
+      displayEventHistory(
+        currentPage,
+        numberOfRows,
+        query,
+        currentStatus,
+        dateOption,
+        sortOption
+      );
+    }
+  });
+});
+
+// if dropdown is on and the click is outside of sortBox
+// close the dropdown
+handleOutsideClick(sortBox, sortContainer);
+
+// helper function for closing dropdown when click is outside
+// of dropdown and dropdown is displayed
+function handleOutsideClick(containerElement, dropDownElement) {
+  document.addEventListener("click", function (e) {
+    if (
+      dropDownElement.classList.contains("show") &&
+      !containerElement.contains(e.target)
+    ) {
+      dropDownElement.classList.toggle("show");
+    }
   });
 }
 
@@ -604,5 +853,12 @@ document.addEventListener("DOMContentLoaded", function () {
     .setAttribute("data-theme", currentThemeSetting);
 
   // display table
-  displayEventHistory(page, numberOfRows);
+  displayEventHistory(
+    currentPage,
+    numberOfRows,
+    query,
+    currentStatus,
+    dateOption,
+    sortOption
+  );
 });

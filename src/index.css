@@ -747,6 +747,7 @@ input:focus {
   width: 100%;
   display: grid;
   gap: 12px;
+  font-size: 14px;
 }
 
 #search-events-history {
@@ -787,6 +788,7 @@ input:focus {
 .status-box,
 .name-box,
 .sort-box {
+  position: relative;
   width: 100%;
   height: 36px;
   display: flex;
@@ -799,6 +801,48 @@ input:focus {
   border-radius: 2px;
   cursor: pointer;
   text-transform: capitalize;
+}
+
+.sort-box {
+  width: 140px;
+}
+
+.date-option-dropdown,
+.status-option-dropdown,
+.sort-option-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  z-index: 10;
+  width: 100%;
+  flex-direction: column;
+  background: var(--clr-secondary-bg);
+  border: 1px solid var(--clr-border);
+  border-radius: 4px;
+  display: none;
+}
+
+.date-option-dropdown.show,
+.status-option-dropdown.show,
+.sort-option-dropdown.show {
+  display: flex;
+}
+
+.date-option,
+.status-option,
+.sort-option {
+  padding: 4px 8px;
+  cursor: pointer;
+}
+
+.date-option:hover,
+.status-option:hover,
+.sort-option:hover {
+  background: var(--clr-hover);
+}
+
+.active-option {
+    font-weight: 700;
 }
 
 .filter-info {
@@ -815,20 +859,6 @@ input:focus {
 
 .sort-control p {
   font-size: 14px;
-  text-transform: capitalize;
-}
-
-.sort-box {
-  width: 140px;
-  height: 36px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  padding: 8px 0;
-  border: 1px solid var(--clr-border);
-  border-radius: 2px;
-  cursor: pointer;
   text-transform: capitalize;
 }
 
@@ -1466,7 +1496,7 @@ td {
 }
 
 .display-ctrl {
-    position: relative;
+  position: relative;
   width: 100px;
   height: 36px;
   display: flex;
@@ -1489,26 +1519,26 @@ td {
 }
 
 .rows-number-dropdown {
-    position: absolute;
-    top: calc(100% + 8px);
-    left: 0;
-    width: 100%;
-    flex-direction: column;
-    background: var(--clr-secondary-bg);
-    border: 1px solid var(--clr-border);
-    border-radius: 4px;
-    display: none;
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  width: 100%;
+  flex-direction: column;
+  background: var(--clr-secondary-bg);
+  border: 1px solid var(--clr-border);
+  border-radius: 4px;
+  display: none;
 }
 
 .rows-number-dropdown.show {
-    display: flex;
+  display: flex;
 }
 
 .rows-number {
-    padding: 4px 8px;
-    cursor: pointer;
+  padding: 4px 8px;
+  cursor: pointer;
 }
 
 .rows-number:hover {
-    background: var(--clr-hover);
+  background: var(--clr-hover);
 }
