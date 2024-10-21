@@ -337,15 +337,17 @@
         <div class="events-history-controls">
           <div class="events-history-filters">
             <!-- search filter -->
-            <label for="search-events-history" class="search-label">
-              <input
-                type="text"
-                name="search-events-history"
-                id="search-events-history"
-                placeholder="Search..."
-              />
-              <span class="lucide--search"></span>
-            </label>
+            <form id="search-form" action="">
+                <label for="search-events-history" class="search-label">
+                    <input
+                      type="text"
+                      name="search-events-history"
+                      id="search-events-history"
+                      placeholder="Search..."
+                    />
+                    <span class="lucide--search"></span>
+                  </label>
+            </form>
             <!-- dropdown menu for date -->
             <div class="date-box">
               <p>Date</p>
@@ -395,7 +397,8 @@
       </section>
       <!-- container for table -->
       <section class="table-container">
-        <div class="pagination-container">
+        <div class="pagination-container"></div>
+        <!-- <div class="pagination-container">
             <div class="pagination-ctrl">
                 <button disabled aria-label="fetch previous page" class="prev-page-btn">
                     <span class="simple-line-icons--arrow-left"></span>
@@ -418,7 +421,7 @@
                     ></span>
                   </div>
             </div>
-        </div>
+        </div> -->
       </section>
     </main>
     <nav class="mobile-nav-container">
