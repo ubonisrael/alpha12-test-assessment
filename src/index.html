@@ -1,13 +1,576 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
   <head>
     <title>Event Management Dashboard</title>
+    <link rel="stylesheet" href="index.css" />
   </head>
   <body>
-    <header class=""></header>
-    <!-- <div style="width: 500px;"><canvas id="dimensions"></canvas></div><br/> -->
-    <div style="width: 800px;"><canvas id="acquisitions"></canvas></div>
-
-    <!-- <script type="module" src="events.js"></script> -->
+    <nav class="nav">
+      <div class="logo-container">
+        <p class="logo"><span class="logo-text">Full Logo</span></p>
+        <button aria-label="open mobile menu" class="mobile-nav-toggle">
+          <!-- hamburger icon -->
+          <svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M4 7H7M20 7H11M20 17H17M4 17H13M4 12H20"
+              stroke="currentColor"
+              stroke-width="1.5"
+              stroke-linecap="round"
+            />
+          </svg>
+        </button>
+      </div>
+      <div class="side-bar">
+        <ul class="nav-links-container">
+          <li class="nav-links">
+            <img
+              src="./assets/alpha12-icons/home.svg"
+              alt="home icon"
+              class="nav-icons"
+            />
+            <p class="nav-link-text">
+              home<span class="nav-link-notifications"></span>
+            </p>
+          </li>
+          <li class="nav-links">
+            <img
+              src="./assets/alpha12-icons/events.svg"
+              alt="events icon"
+              class="nav-icons"
+            />
+            <p class="nav-link-text">
+              events<span class="nav-link-notifications"></span>
+            </p>
+          </li>
+          <li class="nav-links">
+            <img
+              src="./assets/alpha12-icons/speakers.svg"
+              alt="speakers icon"
+              class="nav-icons"
+            />
+            <p class="nav-link-text">
+              speakers<span class="nav-link-notifications"></span>
+            </p>
+          </li>
+          <li class="nav-links">
+            <img
+              src="./assets/alpha12-icons/reports.svg"
+              alt="reports icon"
+              class="nav-icons"
+            />
+            <p class="nav-link-text">
+              reports<span class="nav-link-notifications"></span>
+            </p>
+          </li>
+          <li class="nav-links">
+            <span class="nav-link-notifications-collapse"></span>
+            <img
+              src="./assets/alpha12-icons/bell.svg"
+              alt="notifications icon"
+              class="nav-icons"
+            />
+            <p class="nav-link-text">
+              notifications <span class="nav-link-notifications show">3</span>
+            </p>
+          </li>
+          <li class="nav-links">
+            <img
+              src="./assets/alpha12-icons/chat.svg"
+              alt="messages icon"
+              class="nav-icons"
+            />
+            <p class="nav-link-text">
+              messages<span class="nav-link-notifications"></span>
+            </p>
+          </li>
+          <li class="nav-links">
+            <img
+              src="./assets/alpha12-icons/settings.svg"
+              alt="settings icon"
+              class="nav-icons"
+            />
+            <p class="nav-link-text">
+              settings<span class="nav-link-notifications"></span>
+            </p>
+          </li>
+          <!-- side bar toggle -->
+          <li class="nav-links side-bar-toggle">
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 20 20"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              class="collapse-icon"
+            >
+              <path
+                d="M9.37498 7.29166L6.45831 10L9.37498 12.7083M13.5416 7.29166L10.625 10L13.5416 12.7083"
+                stroke="currentColor"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+            <p class="nav-link-text">
+              collapse<span class="nav-link-notifications"></span>
+            </p>
+          </li>
+        </ul>
+        <!-- dark mode toggle -->
+        <label for="dark-mode" class="dark-mode-toggle-container">
+          <input
+            type="checkbox"
+            name="dark-mode"
+            id="dark-mode"
+            class="dark-mode-toggle"
+          />
+          dark mode
+        </label>
+        <!-- user account -->
+        <div class="avatar-container">
+          <img
+            src="./assets/alpha12-icons/avatar.png"
+            alt="avatar"
+            class="avatar"
+          />
+          <div class="user-details-container">
+            <p class="user-name">rudra devi</p>
+            <p class="user-email">rudra.devi@gmail.com</p>
+          </div>
+        </div>
+      </div>
+    </nav>
+    <main id="main" class="main">
+      <section class="summaries">
+        <h1 class="summaries-header">Welcome! here&apos;s your summary</h1>
+        <div class="summary-container">
+          <div class="events summary">
+            <h2 class="summary-subheader">
+              total events<span aria-label="more info">
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 16 16"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M8 8.66663V9.99996"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                  <path
+                    d="M8.33332 5.99996C8.33332 6.18405 8.18408 6.33329 7.99999 6.33329C7.81589 6.33329 7.66666 6.18405 7.66666 5.99996C7.66666 5.81586 7.81589 5.66663 7.99999 5.66663C8.18408 5.66663 8.33332 5.81586 8.33332 5.99996Z"
+                    stroke="#64748B"
+                  />
+                  <path
+                    d="M12.8333 7.99996C12.8333 10.6693 10.6694 12.8333 7.99999 12.8333C5.33061 12.8333 3.16666 10.6693 3.16666 7.99996C3.16666 5.33058 5.33061 3.16663 7.99999 3.16663C10.6694 3.16663 12.8333 5.33058 12.8333 7.99996Z"
+                    stroke="#64748B"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </span>
+            </h2>
+            <div class="summary-text-container">
+              <p class="summary-text">100,000</p>
+              <p class="summary-figure">
+                <span
+                  aria-hidden="true"
+                  class="graph-icon"
+                  data-trend="positive"
+                ></span
+                ><span class="summary-percent" data-percent="+5.0%">5.0%</span>
+              </p>
+            </div>
+          </div>
+          <div class="active-speakers summary">
+            <h2 class="summary-subheader">
+              active speakers<span aria-label="more info">
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 16 16"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M8 8.66663V9.99996"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                  <path
+                    d="M8.33332 5.99996C8.33332 6.18405 8.18408 6.33329 7.99999 6.33329C7.81589 6.33329 7.66666 6.18405 7.66666 5.99996C7.66666 5.81586 7.81589 5.66663 7.99999 5.66663C8.18408 5.66663 8.33332 5.81586 8.33332 5.99996Z"
+                    stroke="#64748B"
+                  />
+                  <path
+                    d="M12.8333 7.99996C12.8333 10.6693 10.6694 12.8333 7.99999 12.8333C5.33061 12.8333 3.16666 10.6693 3.16666 7.99996C3.16666 5.33058 5.33061 3.16663 7.99999 3.16663C10.6694 3.16663 12.8333 5.33058 12.8333 7.99996Z"
+                    stroke="#64748B"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </span>
+            </h2>
+            <div class="summary-text-container">
+              <p class="summary-text">25</p>
+              <p class="summary-figure">
+                <span
+                  aria-hidden="true"
+                  class="graph-icon"
+                  data-trend="negative"
+                ></span
+                ><span class="summary-percent" data-percent="-5.0%">5.0%</span>
+              </p>
+            </div>
+          </div>
+          <div class="total-reg summary">
+            <h2 class="summary-subheader">
+              total registrations<span aria-label="more info">
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 16 16"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M8 8.66663V9.99996"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                  <path
+                    d="M8.33332 5.99996C8.33332 6.18405 8.18408 6.33329 7.99999 6.33329C7.81589 6.33329 7.66666 6.18405 7.66666 5.99996C7.66666 5.81586 7.81589 5.66663 7.99999 5.66663C8.18408 5.66663 8.33332 5.81586 8.33332 5.99996Z"
+                    stroke="#64748B"
+                  />
+                  <path
+                    d="M12.8333 7.99996C12.8333 10.6693 10.6694 12.8333 7.99999 12.8333C5.33061 12.8333 3.16666 10.6693 3.16666 7.99996C3.16666 5.33058 5.33061 3.16663 7.99999 3.16663C10.6694 3.16663 12.8333 5.33058 12.8333 7.99996Z"
+                    stroke="#64748B"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </span>
+            </h2>
+            <div class="summary-text-container">
+              <p class="summary-text">300</p>
+              <p class="summary-figure">
+                <span
+                  aria-hidden="true"
+                  class="graph-icon"
+                  data-trend="positive"
+                ></span
+                ><span class="summary-percent" data-percent="+5.0%">5.0%</span>
+              </p>
+            </div>
+          </div>
+          <div class="total-revenue summary">
+            <h2 class="summary-subheader">
+              total revenue<span aria-label="more info">
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 16 16"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M8 8.66663V9.99996"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                  <path
+                    d="M8.33332 5.99996C8.33332 6.18405 8.18408 6.33329 7.99999 6.33329C7.81589 6.33329 7.66666 6.18405 7.66666 5.99996C7.66666 5.81586 7.81589 5.66663 7.99999 5.66663C8.18408 5.66663 8.33332 5.81586 8.33332 5.99996Z"
+                    stroke="#64748B"
+                  />
+                  <path
+                    d="M12.8333 7.99996C12.8333 10.6693 10.6694 12.8333 7.99999 12.8333C5.33061 12.8333 3.16666 10.6693 3.16666 7.99996C3.16666 5.33058 5.33061 3.16663 7.99999 3.16663C10.6694 3.16663 12.8333 5.33058 12.8333 7.99996Z"
+                    stroke="#64748B"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </span>
+            </h2>
+            <div class="summary-text-container">
+              <p class="summary-text">$500,000</p>
+              <p class="summary-figure">
+                <span
+                  aria-hidden="true"
+                  class="graph-icon"
+                  data-trend="positive"
+                ></span
+                ><span class="summary-percent" data-percent="+5.0%">5.0%</span>
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section class="events-chart">
+        <h1 class="events-chart-header">Event Registrations per month</h1>
+        <div class="charts-container">
+          <div class="canvas-container">
+            <canvas id="event-registrations"></canvas>
+          </div>
+          <section aria-label="carousel" class="latest-news-carousel">
+            <p class="sr-only">
+              Carousel with one slide shown at a time. Use slide dot buttons at
+              the end to jump to slides or on the sides to go to the next or
+              previous slide.
+            </p>
+            <div
+              aria-label="carousel controls"
+              class="carousel-controls-container prev-next-ctrl"
+            >
+              <span
+                role="button"
+                aria-label="go to previous slide"
+                class="previous-slide"
+              >
+                <img src="./assets/alpha12-icons/chevron-left.png" alt="null" />
+              </span>
+              <span
+                role="button"
+                aria-label="go to nextslide"
+                class="next-slide"
+              >
+                <img
+                  src="./assets/alpha12-icons/chevron-right.png"
+                  alt="null"
+                />
+              </span>
+            </div>
+            <div
+              role="group"
+              data-slide-id="1"
+              aria-label="slide 1 of 3"
+              class="slide current-slide"
+            >
+              <img src="./assets/alpha12-slides/slide.png" alt="latest news" />
+              <div class="slide-info">
+                <h3 class="slide-header">Latest News & Updates</h3>
+                <p class="slide-text">
+                  Turpis interdum nunc varius ornare dignissim pretium. Massa
+                  ornare quis aliquet sed vitae. Sed velit nisi, fermentum erat.
+                  Fringilla purus, erat fringilla tincidunt quisque non.
+                  Pellentesque in ut tellus.
+                </p>
+              </div>
+            </div>
+            <div
+              role="group"
+              data-slide-id="2"
+              aria-label="slide 2 of 3"
+              class="slide"
+            >
+              <img src="./assets/alpha12-slides/slide2.png" alt="latest news" />
+              <div class="slide-info">
+                <h3 class="slide-header">Latest News & Updates</h3>
+                <p class="slide-text">
+                  Turpis interdum nunc varius ornare dignissim pretium. Massa
+                  ornare quis aliquet sed vitae. Sed velit nisi, fermentum erat.
+                  Fringilla purus, erat fringilla tincidunt quisque non.
+                  Pellentesque in ut tellus.
+                </p>
+              </div>
+            </div>
+            <div
+              role="group"
+              data-slide-id="3"
+              aria-label="slide 3 of 3"
+              class="slide"
+            >
+              <img src="./assets/alpha12-slides/slide3.png" alt="latest news" />
+              <div class="slide-info">
+                <h3 class="slide-header">Latest News & Updates</h3>
+                <p class="slide-text">
+                  Turpis interdum nunc varius ornare dignissim pretium. Massa
+                  ornare quis aliquet sed vitae. Sed velit nisi, fermentum erat.
+                  Fringilla purus, erat fringilla tincidunt quisque non.
+                  Pellentesque in ut tellus.
+                </p>
+              </div>
+            </div>
+            <ul
+              aria-label="carousel controls"
+              class="carousel-controls-container slide-ctrls"
+            >
+              <li
+                data-slide-btn-id="1"
+                role="button"
+                aria-current="true"
+                aria-label="go to slide 1"
+                class="slide-btn active-slide"
+              ></li>
+              <li
+                data-slide-btn-id="2"
+                role="button"
+                aria-current="false"
+                aria-label="go to slide 2"
+                class="slide-btn"
+              ></li>
+              <li
+                data-slide-btn-id="3"
+                role="button"
+                aria-current="false"
+                aria-label="go to slide 3"
+                class="slide-btn"
+              ></li>
+            </ul>
+          </section>
+        </div>
+      </section>
+      <section class="events-history">
+        <h1 class="">events history</h1>
+        <div class="events-history-controls">
+          <div class="events-history-filters">
+            <!-- search filter -->
+            <label for="search-events-history" class="search-label">
+              <input
+                type="text"
+                name="search-events-history"
+                id="search-events-history"
+                placeholder="Search..."
+              />
+              <span class="lucide--search"></span>
+            </label>
+            <!-- dropdown menu for date -->
+            <div class="date-box">
+              <p>Date</p>
+              <span
+                class="solar--alt-arrow-down-line-duotone select-box__icon"
+              ></span>
+            </div>
+            <!-- dropdown menu for status -->
+            <div class="status-box">
+              <p>Status</p>
+              <span
+                class="solar--alt-arrow-down-line-duotone select-box__icon"
+              ></span>
+            </div>
+            <!-- dropdown menu for name -->
+            <div class="name-box">
+              <p>Name</p>
+              <span
+                class="solar--alt-arrow-down-line-duotone select-box__icon"
+              ></span>
+            </div>
+            <p class="filter-info">Displaying 100 results</p>
+          </div>
+          <div class="sort-control-container">
+            <div class="sort-control">
+              <p class="">sort:</p>
+              <div class="sort-box">
+                <p>most recent</p>
+                <span
+                  class="solar--alt-arrow-down-line-duotone select-box__icon"
+                ></span>
+              </div>
+            </div>
+            <div class="other-controls-container">
+              <button class="other-btn">
+                <span
+                  aria-label="other options"
+                  class="tabler--dots-vertical"
+                ></span>
+              </button>
+              <button class="export-btn">
+                <span aria-hidden="true" class="fe--import"></span>export
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- container for table -->
+      <section class="table-container">
+        <div class="pagination-container">
+            <div class="pagination-ctrl">
+                <button disabled aria-label="fetch previous page" class="prev-page-btn">
+                    <span class="simple-line-icons--arrow-left"></span>
+                </button>
+                <ul class="pagination">
+                    <li class="page current-page">1</li>
+                    <li class="page">2</li>
+                    <li class="page">3</li>
+                </ul>
+                <button aria-label="fetch next page" class="next-page-btn">
+                    <span class="simple-line-icons--arrow-right"></span>
+                </button>
+            </div>
+            <div class="display-ctrl-container">
+                <p class="display-ctrl-text">Show:</p>
+                <div class="display-ctrl">
+                    <p>10 rows</p>
+                    <span
+                      class="solar--alt-arrow-down-line-duotone select-box__icon"
+                    ></span>
+                  </div>
+            </div>
+        </div>
+      </section>
+    </main>
+    <nav class="mobile-nav-container">
+      <ul class="mobile-nav">
+        <li class="mobile-nav-links">
+          <img
+            src="./assets/alpha12-icons/home.svg"
+            alt="home icon"
+            class="nav-icons"
+          />
+          <p class="">home</p>
+        </li>
+        <li class="mobile-nav-links">
+          <img
+            src="./assets/alpha12-icons/events.svg"
+            alt="events icon"
+            class="nav-icons"
+          />
+          <p class="">events</p>
+        </li>
+        <li class="mobile-nav-links">
+          <img
+            src="./assets/alpha12-icons/speakers.svg"
+            alt="speakers icon"
+            class="nav-icons"
+          />
+          <p class="">speakers</p>
+        </li>
+        <li class="mobile-nav-links">
+          <img
+            src="./assets/alpha12-icons/reports.svg"
+            alt="reports icon"
+            class="nav-icons"
+          />
+          <p class="nav-link">reports</p>
+        </li>
+        <li class="mobile-nav-links">
+          <img
+            src="./assets/alpha12-icons/profile.svg"
+            alt="reports icon"
+            class="nav-icons"
+          />
+          <p class="">profile</p>
+        </li>
+      </ul>
+    </nav>
+    <script type="module" src="index.js"></script>
   </body>
 </html>
