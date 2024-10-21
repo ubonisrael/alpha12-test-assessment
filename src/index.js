@@ -49,9 +49,6 @@ const darkModeToggleContainer = document.querySelector(
 );
 const nav = document.getElementsByTagName("nav")[0];
 
-const sideBarToggle = document.querySelector(".side-bar-toggle");
-const collapseIcon = document.querySelector(".collapse-icon");
-
 function getThemeFromSettings({ localStorageTheme, systemSettingDark }) {
   if (localStorageTheme !== null) {
     return localStorageTheme;
@@ -159,6 +156,8 @@ sideBarButton.addEventListener("click", function () {
   document.querySelector(".user-details-container").classList.toggle("hide");
   nav.classList.toggle("collapse");
   document.getElementById('main').classList.toggle('main-full')
+  document.querySelector('.avatar-container').classList.toggle('avatar-container-collapse')
+
 });
 
 // carousel controls
