@@ -1,22 +1,5 @@
 import eventsHistory from "./data.json";
-import {
-  Chart,
-  Colors,
-  BarController,
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Legend,
-} from "chart.js";
-
-Chart.register(
-  Colors,
-  BarController,
-  BarElement,
-  CategoryScale,
-  LinearScale,
-  Legend
-);
+import Chart from 'chart.js/auto'
 
 let chart = null;
 
@@ -324,7 +307,7 @@ async function drawChart() {
       ],
     },
     options: {
-      animations: false,
+      // animations: false,
       responsive: true,
       maintainAspectRatio: false,
       plugins: {
