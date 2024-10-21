@@ -1,7 +1,24 @@
-import Chart from "chart.js/auto";
 import eventsHistory from "./data.json";
+import {
+  Chart,
+  Colors,
+  BarController,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Legend,
+} from "chart.js";
 
-let chart = null
+Chart.register(
+  Colors,
+  BarController,
+  BarElement,
+  CategoryScale,
+  LinearScale,
+  Legend
+);
+
+let chart = null;
 
 const speaker_avatar = `<svg width="84" height="36" viewBox="0 0 84 36" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
 <g clip-path="url(#clip0_9_41167)">
@@ -90,7 +107,7 @@ darkModeToggle.addEventListener("change", function () {
   // update border style on header element
   nav.style.border = this.checked ? "none" : "2px solid #e2e8f0";
   // redraw chart
-  drawChart()
+  drawChart();
 });
 
 //
@@ -285,13 +302,13 @@ async function drawChart() {
     { month: "Dec", registrations: 607 },
   ];
 
-  const canvas = document.getElementById("event-registrations")
+  const canvas = document.getElementById("event-registrations");
 
   if (chart) {
     // chart exists, destroy it before creating a new one
-    chart.destroy()
+    chart.destroy();
   }
-  
+
   chart = new Chart(canvas, {
     type: "bar",
     data: {
@@ -327,8 +344,8 @@ async function drawChart() {
             tickBorderDash: [0, 6],
           },
           ticks: {
-            color: currentThemeSetting === "dark" ? "#FFFFFF" : "#64748B"
-          }
+            color: currentThemeSetting === "dark" ? "#FFFFFF" : "#64748B",
+          },
         },
         y: {
           beginAtZero: true,
@@ -348,13 +365,13 @@ async function drawChart() {
                 return value;
               }
             },
-            color: currentThemeSetting === "dark" ? "#FFFFFF" : "#64748B"
+            color: currentThemeSetting === "dark" ? "#FFFFFF" : "#64748B",
           },
         },
       },
     },
   });
-};
+}
 
 //
 //
@@ -869,7 +886,7 @@ document.addEventListener("DOMContentLoaded", function () {
     .setAttribute("data-theme", currentThemeSetting);
 
   // draw chart
-  drawChart()
+  drawChart();
 
   // display table
   displayEventHistory(
